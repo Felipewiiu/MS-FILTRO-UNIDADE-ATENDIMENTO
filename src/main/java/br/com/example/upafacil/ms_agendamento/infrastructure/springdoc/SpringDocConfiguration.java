@@ -12,9 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class SpringDocConfiguration {
 
     String desc = """
-            # API de Gerenciamento de usuários mahallo kids\n
-            
-            O microsserviço user mahallo kids, foi criado para gerenciar usuários na plataforma e-comerce
+           
             """;
 
     @Bean

@@ -13,6 +13,8 @@ public class CreateUpaUseCase {
     private final UpaRepositoryGateway upaRepositoryGateway;
     private final List<UpaValidator> upaValidator;
 
+
+
     public Upa createUpa(Upa upa) {
 
         upaValidator.forEach(validator -> validator.validate(upa));
