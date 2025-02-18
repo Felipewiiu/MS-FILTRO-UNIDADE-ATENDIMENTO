@@ -4,6 +4,7 @@ import br.com.example.upafacil.ms_agendamento.application.gateway.UpaRepositoryG
 import br.com.example.upafacil.ms_agendamento.application.validators.UpaValidator;
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -14,8 +15,7 @@ public class CreateUpaUseCase {
     private final List<UpaValidator> upaValidator;
 
 
-
-    public Upa createUpa(Upa upa) {
+    public Mono<Upa> createUpa(Upa upa) {
 
         upaValidator.forEach(validator -> validator.validate(upa));
 

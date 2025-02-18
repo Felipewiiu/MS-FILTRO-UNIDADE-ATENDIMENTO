@@ -1,18 +1,18 @@
 package br.com.example.upafacil.ms_agendamento.application.gateway;
 
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface UpaRepositoryGateway {
 
-    Upa createUpa (Upa upa);
+    Mono<Upa> createUpa(Upa upa);
 
-    Upa findUpaById(Long upaId);
+    Mono<Upa> findUpaById(Long upaId);
 
-    List<Upa> findAllUpa();
+    Flux<Upa> findAllUpa();
 
-    void deleteUpaById(Long upaId);
+    Mono<Void> deleteUpaById(Long upaId);
 
-    Upa updateUpa(Upa upa);
+    Mono<Upa> updateUpa(Upa upa);
 }
