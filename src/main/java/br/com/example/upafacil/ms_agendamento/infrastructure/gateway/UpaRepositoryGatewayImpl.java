@@ -26,12 +26,12 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     @Override
     public Mono<Upa> findUpaById(Long upaId) {
-        return null;
+       return upaRepository.findByUpaId(upaId);
     }
 
     @Override
     public Flux<Upa> findAllUpa() {
-        return null;
+        return upaRepository.findAll().map(upaMapper::toDomain);
     }
 
     @Override

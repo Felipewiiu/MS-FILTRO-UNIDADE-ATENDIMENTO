@@ -2,6 +2,8 @@ package br.com.example.upafacil.ms_agendamento.infrastructure.config;
 
 import br.com.example.upafacil.ms_agendamento.application.gateway.UpaRepositoryGateway;
 import br.com.example.upafacil.ms_agendamento.application.usecases.CreateUpaUseCase;
+import br.com.example.upafacil.ms_agendamento.application.usecases.FindAllUpasUseCase;
+import br.com.example.upafacil.ms_agendamento.application.usecases.FindUpaByIdUseCase;
 import br.com.example.upafacil.ms_agendamento.application.validators.UpaValidator;
 import br.com.example.upafacil.ms_agendamento.infrastructure.gateway.UpaRepositoryGatewayImpl;
 import br.com.example.upafacil.ms_agendamento.infrastructure.mapper.upa.UpaMapper;
@@ -30,6 +32,19 @@ public class UpaConfig {
             @Qualifier("customUpaRepositoryGatewayImpl") UpaRepositoryGateway upaRepositoryGateway,
             List<UpaValidator> upaValidatorList) {
         return new CreateUpaUseCase(upaRepositoryGateway, upaValidatorList);
+    }
+
+    @Bean
+    public FindUpaByIdUseCase customFindUpaByIdUseCase(
+            @Qualifier("customUpaRepositoryGatewayImpl") UpaRepositoryGateway upaRepositoryGateway){
+        return new FindUpaByIdUseCase(upaRepositoryGateway);
+    }
+
+    @Bean
+    public FindAllUpasUseCase customFindAllUpasUseCase(
+            @Qualifier("customUpaRepositoryGatewayImpl") UpaRepositoryGateway upaRepositoryGateway){
+        return new FindAllUpasUseCase(upaRepositoryGateway);
+
     }
 
 

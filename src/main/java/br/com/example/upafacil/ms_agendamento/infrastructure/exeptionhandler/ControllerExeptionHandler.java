@@ -1,5 +1,6 @@
 package br.com.example.upafacil.ms_agendamento.infrastructure.exeptionhandler;
 
+import br.com.example.upafacil.ms_agendamento.application.exeptions.NotFoundUpaException;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,20 @@ public class ControllerExeptionHandler {
         error.setPath(exchange.getRequest().getPath().value());
 
         return ResponseEntity.status(httpStatus).body(error);
+    }
+
+    @ExceptionHandler(NotFoundUpaException.class)
+    public ResponseEntity<StandardError> handleNotFoundUpaException(NotFoundUpaException ex, ServerWebExchange exchange) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        StandardError error = new StandardError();
+
+        error.setTimestamp(Instant.now());
+        error.setStatus(status.value());
+        error.setError(ex.getMessage());
+        error.setMessage("Upa not found");
+        error.setPath(exchange.getRequest().getPath().value());
+
+        return ResponseEntity.status(status).body(error);
     }
 
 
