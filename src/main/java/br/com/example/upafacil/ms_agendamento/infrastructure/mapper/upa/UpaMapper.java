@@ -7,7 +7,9 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface UpaMapper {
 
+
     Upa toDomain(UpaEntity upaEntity);
+
 
     UpaEntity toEntity(Upa upa);
 }

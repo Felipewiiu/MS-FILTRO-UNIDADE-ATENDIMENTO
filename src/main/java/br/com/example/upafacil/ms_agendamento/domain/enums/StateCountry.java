@@ -1,47 +1,41 @@
 package br.com.example.upafacil.ms_agendamento.domain.enums;
 
 public enum StateCountry {
-    ACRE("AC", "Acre"),
-    ALAGOAS("AL", "Alagoas"),
-    AMAPA("AP", "Amapá"),
-    AMAZONAS("AM", "Amazonas"),
-    BAHIA("BA", "Bahia"),
-    CEARA("CE", "Ceará"),
-    DISTRITO_FEDERAL("DF", "Distrito Federal"),
-    ESPIRITO_SANTO("ES", "Espírito Santo"),
-    GOIAS("GO", "Goiás"),
-    MARANHAO("MA", "Maranhão"),
-    MATO_GROSSO("MT", "Mato Grosso"),
-    MATO_GROSSO_DO_SUL("MS", "Mato Grosso do Sul"),
-    MINAS_GERAIS("MG", "Minas Gerais"),
-    PARA("PA", "Pará"),
-    PARAIBA("PB", "Paraíba"),
-    PARANA("PR", "Paraná"),
-    PERNAMBUCO("PE", "Pernambuco"),
-    PIAUI("PI", "Piauí"),
-    RIO_DE_JANEIRO("RJ", "Rio de Janeiro"),
-    RIO_GRANDE_DO_NORTE("RN", "Rio Grande do Norte"),
-    RIO_GRANDE_DO_SUL("RS", "Rio Grande do Sul"),
-    RONDONIA("RO", "Rondônia"),
-    RORAIMA("RR", "Roraima"),
-    SANTA_CATARINA("SC", "Santa Catarina"),
-    SAO_PAULO("SP", "São Paulo"),
-    SERGIPE("SE", "Sergipe"),
-    TOCANTINS("TO", "Tocantins");
+    ACRE(0),
+    ALAGOAS(1),
+    AMAPA(2),
+    AMAZONAS(3),
+    BAHIA(4),
+    CEARA(5),
+    DISTRITO_FEDERAL(6),
+    ESPIRITO_SANTO(7),
+    GOIAS(8),
+    MARANHAO(9),
+    MATO_GROSSO(10),
+    MATO_GROSSO_DO_SUL(11),
+    MINAS_GERAIS(12),
+    PARA(13),
+    PARAIBA(14),
+    PARANA(15),
+    PERNAMBUCO(16),
+    PIAUI(17),
+    RIO_DE_JANEIRO(18),
+    RIO_GRANDE_DO_NORTE(19),
+    RIO_GRANDE_DO_SUL(20),
+    RONDONIA(21),
+    RORAIMA(22),
+    SANTA_CATARINA(23),
+    SAO_PAULO(24),
+    SERGIPE(25),
+    TOCANTINS(26);
 
-    private final String sigla;
-    private final String nome;
+    private final int codigo;
 
-    StateCountry(String sigla, String nome) {
-        this.sigla = sigla;
-        this.nome = nome;
+    StateCountry(int codigo) {
+        this.codigo = codigo;
     }
 
-    public String getSigla() {
-        return sigla;
-    }
-
-    public String getNome() {
-        return nome;
+    public int getCodigo() {
+        return codigo;
     }
 }

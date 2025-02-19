@@ -26,11 +26,32 @@ public class UpaEntity {
 
     private String city;
 
-    private StateCountry state;
+    private Integer state;
 
     private String zipCode;
 
     private Double latitude;
 
     private Double longitude;
+
+    public UpaEntity(String name, Integer capacity, String street, String city, StateCountry state, String zipCode, Double latitude, Double longitude) {
+        this.name = name;
+        this.capacity = capacity;
+        this.street = street;
+        this.city = city;
+        setStateCountry(state);
+        this.zipCode = zipCode;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public StateCountry getStateCountry() {
+        return StateCountry.valueOf(this.state.toString());
+    }
+
+    public void setStateCountry(StateCountry stateCountry) {
+        if (stateCountry != null) {
+            this.state = stateCountry.getCodigo();
+        }
+    }
 }

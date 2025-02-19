@@ -22,7 +22,7 @@ public class Upa {
 
     private String city;
 
-    private StateCountry state;
+    private Integer state;
 
     private String zipCode;
 

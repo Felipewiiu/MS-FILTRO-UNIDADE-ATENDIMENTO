@@ -12,7 +12,7 @@ public record UpaDto(
 
         String city,
 
-        StateCountry state,
+        Integer state,
 
         String zipCode,
 
