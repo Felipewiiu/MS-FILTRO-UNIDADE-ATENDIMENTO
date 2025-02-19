@@ -1,6 +1,7 @@
 package br.com.example.upafacil.ms_agendamento.presentation.controller;
 
 import br.com.example.upafacil.ms_agendamento.application.usecases.CreateUpaUseCase;
+import br.com.example.upafacil.ms_agendamento.application.usecases.DeletUpaUseCase;
 import br.com.example.upafacil.ms_agendamento.application.usecases.FindAllUpasUseCase;
 import br.com.example.upafacil.ms_agendamento.application.usecases.FindUpaByIdUseCase;
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
@@ -22,6 +23,7 @@ public class UpaController {
     private final UpaDtoMapper upaDtoMapper;
     private final FindUpaByIdUseCase findUpaByIdUseCase;
     private final FindAllUpasUseCase findAllUpasUseCase;
+    private final DeletUpaUseCase deletUpaUseCase;
 
     @PostMapping("/create")
     public Mono<ResponseEntity<UpaDto>> createUpa(@RequestBody UpaDto upaDto) {
@@ -38,11 +40,18 @@ public class UpaController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Flux<UpaDto>> findAllUpa() {
+    public Mono<ResponseEntity<Flux<UpaDto>>> findAllUpa() {
         Flux<UpaDto> upaDtoFlux = findAllUpasUseCase.findAllUpa()
                 .map(upaDtoMapper::toDto);
 
-        return ResponseEntity.ok().body(upaDtoFlux);
+        return Mono.just(ResponseEntity.accepted().body(upaDtoFlux));
+    }
+
+
+    @DeleteMapping("/delete/{id}")
+    public Mono<ResponseEntity<Void>> deleteUpa(@PathVariable("id") Long upaId) {
+        return deletUpaUseCase.deleteUpaById(upaId)
+                .then(Mono.just(ResponseEntity.noContent().build()));
     }
 
 

@@ -36,8 +36,7 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     @Override
     public Mono<Void> deleteUpaById(Long upaId) {
-
-        return null;
+        return upaRepository.deleteByUpaId(upaId);
     }
 
     @Override

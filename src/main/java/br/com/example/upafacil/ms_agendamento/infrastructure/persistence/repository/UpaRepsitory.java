@@ -9,4 +9,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface UpaRepsitory extends ReactiveCrudRepository<UpaEntity, Long> {
     Mono<Upa> findByUpaId(Long upaId);
+
+    Mono<Void> deleteByUpaId(Long upaId);
 }
