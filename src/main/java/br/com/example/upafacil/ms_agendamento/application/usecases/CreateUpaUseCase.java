@@ -12,13 +12,16 @@ import java.util.List;
 public class CreateUpaUseCase {
 
     private final UpaRepositoryGateway upaRepositoryGateway;
-    private final List<UpaValidator> upaValidator;
+    private final List<UpaValidator> upaValidators;
 
 
     public Mono<Upa> createUpa(Upa upa) {
 
-        upaValidator.forEach(validator -> validator.validate(upa));
-
-        return upaRepositoryGateway.createUpa(upa);
+        return Mono.when(upaValidators.stream()
+                        .map(validator -> validator.validate(upa))
+                        .toList()
+                )
+                .then(upaRepositoryGateway.createUpa(upa));
     }
 }
+

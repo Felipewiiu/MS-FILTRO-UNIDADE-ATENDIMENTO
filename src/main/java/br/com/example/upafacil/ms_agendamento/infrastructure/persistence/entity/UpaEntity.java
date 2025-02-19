@@ -34,7 +34,8 @@ public class UpaEntity {
 
     private Double longitude;
 
-    public UpaEntity(String name, Integer capacity, String street, String city, StateCountry state, String zipCode, Double latitude, Double longitude) {
+    public UpaEntity(String name, Integer capacity, String street, String city, StateCountry state, String zipCode,
+                     Double latitude, Double longitude) {
         this.name = name;
         this.capacity = capacity;
         this.street = street;

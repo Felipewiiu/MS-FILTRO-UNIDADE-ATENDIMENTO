@@ -1,6 +1,5 @@
 package br.com.example.upafacil.ms_agendamento.domain.entities;
 
-import br.com.example.upafacil.ms_agendamento.domain.enums.StateCountry;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
