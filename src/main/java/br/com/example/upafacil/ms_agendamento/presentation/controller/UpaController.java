@@ -1,9 +1,6 @@
 package br.com.example.upafacil.ms_agendamento.presentation.controller;
 
-import br.com.example.upafacil.ms_agendamento.application.usecases.CreateUpaUseCase;
-import br.com.example.upafacil.ms_agendamento.application.usecases.DeletUpaUseCase;
-import br.com.example.upafacil.ms_agendamento.application.usecases.FindAllUpasUseCase;
-import br.com.example.upafacil.ms_agendamento.application.usecases.FindUpaByIdUseCase;
+import br.com.example.upafacil.ms_agendamento.application.usecases.*;
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
 import br.com.example.upafacil.ms_agendamento.presentation.dto.UpaDto;
 import br.com.example.upafacil.ms_agendamento.presentation.mapper.UpaDtoMapper;
@@ -24,6 +21,7 @@ public class UpaController {
     private final FindUpaByIdUseCase findUpaByIdUseCase;
     private final FindAllUpasUseCase findAllUpasUseCase;
     private final DeletUpaUseCase deletUpaUseCase;
+    private final UpdateUpaUseCase updateUpaUseCase;
 
     @PostMapping("/create")
     public Mono<ResponseEntity<UpaDto>> createUpa(@RequestBody UpaDto upaDto) {
@@ -55,8 +53,11 @@ public class UpaController {
     }
 
     @PutMapping("/update/{id}")
-    public Mono<ResponseEntity<UpaDto>> updateUpa(@RequestBody UpaDto upaDto, @PathVariable("id") Long upaId) {
+    public Mono<ResponseEntity<UpaDto>> updateUpa (@PathVariable("id") Long upaId, @RequestBody UpaDto upaDto) {
+        Mono<UpaDto> upa = updateUpaUseCase.updateUpa(upaId, upaDtoMapper.toDomain(upaDto))
+                .map(upaDtoMapper::toDto);
 
+        return upa.map(ResponseEntity::ok);
     }
 
 

@@ -42,13 +42,11 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     @Override
     public Mono<Upa> updateUpa(Long upaId, Upa newUpa) {
-
-        Upa upa = new Upa();
-        upa.upaUpdate(newUpa);
-
-        return upaRepository.save(upaMapper.toEntity(upa))
+        return upaRepository.findById(upaId)
+                .flatMap(existingUpa -> {
+                    existingUpa.upaUpdate(newUpa);
+                    return upaRepository.save(existingUpa);
+                })
                 .map(upaMapper::toDomain);
-
-
     }
 }
