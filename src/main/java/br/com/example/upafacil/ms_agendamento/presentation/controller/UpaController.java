@@ -54,5 +54,10 @@ public class UpaController {
                 .then(Mono.just(ResponseEntity.noContent().build()));
     }
 
+    @PutMapping("/update/{id}")
+    public Mono<ResponseEntity<UpaDto>> updateUpa(@RequestBody UpaDto upaDto, @PathVariable("id") Long upaId) {
+
+    }
+
 
 }

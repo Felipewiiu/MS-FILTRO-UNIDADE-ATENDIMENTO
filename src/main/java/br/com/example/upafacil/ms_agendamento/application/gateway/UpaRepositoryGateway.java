@@ -14,5 +14,5 @@ public interface UpaRepositoryGateway {
 
     Mono<Void> deleteUpaById(Long upaId);
 
-    Mono<Upa> updateUpa(Upa upa);
+    Mono<Upa> updateUpa(Long upa, Upa newUpa);
 }

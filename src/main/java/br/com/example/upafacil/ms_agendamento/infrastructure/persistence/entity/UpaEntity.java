@@ -1,5 +1,6 @@
 package br.com.example.upafacil.ms_agendamento.infrastructure.persistence.entity;
 
+import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
 import br.com.example.upafacil.ms_agendamento.domain.enums.StateCountry;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,6 +46,7 @@ public class UpaEntity {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
 
     public StateCountry getStateCountry() {
         return StateCountry.valueOf(this.state.toString());

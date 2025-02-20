@@ -3,6 +3,7 @@ package br.com.example.upafacil.ms_agendamento.infrastructure.gateway;
 import br.com.example.upafacil.ms_agendamento.application.gateway.UpaRepositoryGateway;
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
 import br.com.example.upafacil.ms_agendamento.infrastructure.mapper.upa.UpaMapper;
+import br.com.example.upafacil.ms_agendamento.infrastructure.persistence.entity.UpaEntity;
 import br.com.example.upafacil.ms_agendamento.infrastructure.persistence.repository.UpaRepsitory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
-     private final UpaRepsitory upaRepository;
-     private final UpaMapper upaMapper;
+    private final UpaRepsitory upaRepository;
+    private final UpaMapper upaMapper;
 
 
     @Override
@@ -26,7 +27,7 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     @Override
     public Mono<Upa> findUpaById(Long upaId) {
-       return upaRepository.findByUpaId(upaId);
+        return upaRepository.findByUpaId(upaId);
     }
 
     @Override
@@ -40,7 +41,14 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
     }
 
     @Override
-    public Mono<Upa> updateUpa(Upa upa) {
-        return null;
+    public Mono<Upa> updateUpa(Long upaId, Upa newUpa) {
+
+        Upa upa = new Upa();
+        upa.upaUpdate(newUpa);
+
+        return upaRepository.save(upaMapper.toEntity(upa))
+                .map(upaMapper::toDomain);
+
+
     }
 }
