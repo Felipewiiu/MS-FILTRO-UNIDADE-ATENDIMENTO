@@ -24,4 +24,3 @@ public class CreateUpaUseCase {
                 .then(upaRepositoryGateway.createUpa(upa));
     }
 }
-

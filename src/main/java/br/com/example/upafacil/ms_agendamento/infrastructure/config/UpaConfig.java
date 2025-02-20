@@ -2,6 +2,7 @@ package br.com.example.upafacil.ms_agendamento.infrastructure.config;
 
 import br.com.example.upafacil.ms_agendamento.application.gateway.UpaRepositoryGateway;
 import br.com.example.upafacil.ms_agendamento.application.usecases.*;
+import br.com.example.upafacil.ms_agendamento.application.validators.IntegrityUpaValidator;
 import br.com.example.upafacil.ms_agendamento.application.validators.UpaValidator;
 import br.com.example.upafacil.ms_agendamento.infrastructure.gateway.UpaRepositoryGatewayImpl;
 import br.com.example.upafacil.ms_agendamento.infrastructure.mapper.upa.UpaMapper;
@@ -56,5 +57,10 @@ public class UpaConfig {
     public UpdateUpaUseCase customUpdateUpaUseCase(
             @Qualifier("customUpaRepositoryGatewayImpl") UpaRepositoryGateway upaRepositoryGateway) {
         return new UpdateUpaUseCase(upaRepositoryGateway);
+    }
+
+    @Bean
+    public IntegrityUpaValidator integrityUpaValidator(){
+        return new IntegrityUpaValidator();
     }
 }

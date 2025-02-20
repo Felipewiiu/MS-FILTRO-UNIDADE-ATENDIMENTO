@@ -10,35 +10,35 @@ public class IntegrityUpaValidator implements UpaValidator {
 
     @Override
     public Mono<Void> validate(Upa upa) {
-        return Mono.fromRunnable(() -> {
+        if (upa.getName() == null || upa.getName().isBlank()) {
+            return Mono.error(new ValidationException("O campo name não pode ser nulo ou em branco"));
+        }
 
-            if (upa.getName() == null || upa.getName().isBlank()) {
-                throw new ValidationException("O campo name não pode ser nulo ou em branco");
-            }
+        if (upa.getCapacity() == null || upa.getCapacity() <= 0) {
+            return Mono.error(new ValidationException("O campo capacity não pode ser nulo ou negativo"));
+        }
 
-            if (upa.getCapacity() == null || upa.getCapacity() <= 0) {
-                throw new ValidationException("O campo capacity não pode ser nulo ou negativo");
-            }
+        if (upa.getStreet() == null || upa.getStreet().isBlank()) {
+            return Mono.error(new ValidationException("O campo street não pode ser nulo ou estar em branco"));
+        }
 
-            if (upa.getStreet() == null || upa.getStreet().isBlank()) {
-                throw new ValidationException("O campo street não pode ser nulo ou estar em branco");
-            }
+        if (upa.getCity() == null || upa.getCity().isBlank()) {
+            return Mono.error(new ValidationException("O Campo city não pode ser nulo ou estar em branco"));
+        }
 
-            if (upa.getCity() == null || upa.getCity().isBlank()) {
-                throw new ValidationException("O Campo city não pode ser nulo ou estar em branco");
-            }
+        if (upa.getState() == null) {
+            return Mono.error(new ValidationException("O campo state não pode estar em branco"));
+        }
 
-            if (upa.getState() == null) {
-                throw new ValidationException("O campo state não pode estar em branco");
-            }
+        if (upa.getZipCode() == null || upa.getZipCode().isBlank()) {
+            return Mono.error(new ValidationException("O campo zipCode não pode ser nulo ou estar em branco"));
+        }
 
-            if (upa.getZipCode() == null || upa.getZipCode().isBlank()) {
-                throw new ValidationException("O campo zipCode não pode ser nulo ou estar em branco");
-            }
+        if (upa.getLatitude() == null) {
+            return Mono.error(new ValidationException("O campo latitude não pode ser nulo ou estar em branco"));
+        }
 
-            if (upa.getLatitude() == null) {
-                throw new ValidationException("O campo latitude não pode ser nulo ou estar em branco");
-            }
-        });
+        return Mono.empty();
     }
+
 }

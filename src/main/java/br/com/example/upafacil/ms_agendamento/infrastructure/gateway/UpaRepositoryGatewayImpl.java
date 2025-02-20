@@ -3,7 +3,6 @@ package br.com.example.upafacil.ms_agendamento.infrastructure.gateway;
 import br.com.example.upafacil.ms_agendamento.application.gateway.UpaRepositoryGateway;
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
 import br.com.example.upafacil.ms_agendamento.infrastructure.mapper.upa.UpaMapper;
-import br.com.example.upafacil.ms_agendamento.infrastructure.persistence.entity.UpaEntity;
 import br.com.example.upafacil.ms_agendamento.infrastructure.persistence.repository.UpaRepsitory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
