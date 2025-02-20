@@ -27,7 +27,8 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     @Override
     public Mono<Upa> findUpaById(Long upaId) {
-        return upaRepository.findByUpaId(upaId);
+        return upaRepository.findById(upaId)
+                .map(upaMapper::toDomain);
     }
 
     @Override
