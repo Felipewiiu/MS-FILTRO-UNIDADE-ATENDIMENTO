@@ -63,4 +63,10 @@ public class UpaConfig {
     public IntegrityUpaValidator integrityUpaValidator(){
         return new IntegrityUpaValidator();
     }
+
+    @Bean
+    public FindNearestUpaUseCase customFindNearestUpaUseCase(
+            @Qualifier("customUpaRepositoryGatewayImpl") UpaRepositoryGateway upaRepositoryGateway){
+        return new FindNearestUpaUseCase(upaRepositoryGateway);
+    }
 }

@@ -15,4 +15,6 @@ public interface UpaRepositoryGateway {
     Mono<Void> deleteUpaById(Long upaId);
 
     Mono<Upa> updateUpa(Long upa, Upa newUpa);
+
+    Mono<Upa> findNearestUpa(Double latitude, Double longitude);
 }

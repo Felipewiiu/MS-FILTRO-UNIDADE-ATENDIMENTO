@@ -22,6 +22,7 @@ public class UpaController {
     private final FindAllUpasUseCase findAllUpasUseCase;
     private final DeletUpaUseCase deletUpaUseCase;
     private final UpdateUpaUseCase updateUpaUseCase;
+    private final FindNearestUpaUseCase findNearestUpaUseCase;
 
     @PostMapping("/create")
     public Mono<ResponseEntity<UpaDto>> createUpa(@RequestBody UpaDto upaDto) {
@@ -58,6 +59,11 @@ public class UpaController {
                 .map(upaDtoMapper::toDto);
 
         return upa.map(ResponseEntity::ok);
+    }
+
+    @GetMapping("/near-upa")
+    public Mono<Upa> getNearestUpa(@RequestParam Double latitude, @RequestParam Double longitude) {
+        return findNearestUpaUseCase.findNearestUpa(latitude, longitude);
     }
 
 
