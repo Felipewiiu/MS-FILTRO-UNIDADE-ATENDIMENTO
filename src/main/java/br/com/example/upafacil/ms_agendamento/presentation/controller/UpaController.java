@@ -3,7 +3,9 @@ package br.com.example.upafacil.ms_agendamento.presentation.controller;
 import br.com.example.upafacil.ms_agendamento.application.usecases.*;
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
 import br.com.example.upafacil.ms_agendamento.presentation.dto.UpaDto;
+import br.com.example.upafacil.ms_agendamento.presentation.dto.UpaLocationDto;
 import br.com.example.upafacil.ms_agendamento.presentation.mapper.UpaDtoMapper;
+import br.com.example.upafacil.ms_agendamento.presentation.mapper.UpaLocationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ public class UpaController {
     private final DeletUpaUseCase deletUpaUseCase;
     private final UpdateUpaUseCase updateUpaUseCase;
     private final FindNearestUpaUseCase findNearestUpaUseCase;
+    private final UpaLocationMapper upaLocationMapper;
 
     @PostMapping("/create")
     public Mono<ResponseEntity<UpaDto>> createUpa(@RequestBody UpaDto upaDto) {
@@ -62,8 +65,10 @@ public class UpaController {
     }
 
     @GetMapping("/near-upa")
-    public Mono<Upa> getNearestUpa(@RequestParam Double latitude, @RequestParam Double longitude) {
-        return findNearestUpaUseCase.findNearestUpa(latitude, longitude);
+    public Mono<UpaLocationDto> getNearestUpa(@RequestParam Double latitude, @RequestParam Double longitude) {
+        Mono<Upa> upaDomain =  findNearestUpaUseCase.findNearestUpa(latitude, longitude);
+
+        return upaDomain.map(upaLocationMapper::toDto);
     }
 
 
