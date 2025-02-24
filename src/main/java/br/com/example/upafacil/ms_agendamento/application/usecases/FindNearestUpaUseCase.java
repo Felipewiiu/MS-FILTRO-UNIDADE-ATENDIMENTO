@@ -5,9 +5,6 @@ import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import java.util.Comparator;
-import java.util.List;
-
 @RequiredArgsConstructor
 public class FindNearestUpaUseCase {
 
