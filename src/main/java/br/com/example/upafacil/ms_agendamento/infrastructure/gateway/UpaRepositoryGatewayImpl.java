@@ -63,6 +63,9 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     @Override
     public Mono<Upa> findNearestUpa(Double latitude, Double longitude) {
+        var teste = upaRepository.findAll();
+        System.out.println(teste);
+
         return upaRepository.findAll()
                 .collectList()
                 .mapNotNull(upas -> upas.stream()

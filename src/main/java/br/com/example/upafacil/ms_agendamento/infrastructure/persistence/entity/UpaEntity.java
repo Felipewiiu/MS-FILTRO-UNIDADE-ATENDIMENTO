@@ -20,8 +20,9 @@ public class UpaEntity {
 
     private String name;
 
-    @NotNull
     private Integer capacity;
+
+    private Integer capacityUsed;
 
     private String street;
 

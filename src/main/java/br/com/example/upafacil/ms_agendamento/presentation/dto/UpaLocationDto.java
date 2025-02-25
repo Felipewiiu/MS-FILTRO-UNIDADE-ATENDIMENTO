@@ -5,6 +5,8 @@ public record UpaLocationDto(
 
         Integer capacity,
 
+        Integer capacityUsed,
+
         String street,
 
         String city,
@@ -20,9 +22,10 @@ public record UpaLocationDto(
         String url
 ) {
 
-    public UpaLocationDto(String name, Integer capacity, String street, String city, Integer state, String zipCode, Double latitude, Double longitude, String url) {
+    public UpaLocationDto(String name, Integer capacity, Integer capacityUsed, String street, String city, Integer state, String zipCode, Double latitude, Double longitude, String url) {
         this.name = name;
         this.capacity = capacity;
+        this.capacityUsed = capacityUsed;
         this.street = street;
         this.city = city;
         this.state = state;

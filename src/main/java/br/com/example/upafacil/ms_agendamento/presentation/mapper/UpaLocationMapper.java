@@ -20,6 +20,7 @@ public interface UpaLocationMapper {
         dto = new UpaLocationDto(
                 dto.name(),
                 dto.capacity(),
+                dto.capacityUsed(),
                 dto.street(),
                 dto.city(),
                 dto.state(),

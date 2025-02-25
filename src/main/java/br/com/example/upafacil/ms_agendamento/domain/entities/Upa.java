@@ -17,6 +17,8 @@ public class Upa {
 
     private Integer capacity;
 
+    private Integer capacityUsed;
+
     private String street;
 
     private String city;
