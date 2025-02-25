@@ -27,6 +27,7 @@ public class UpaController {
     private final UpdateUpaUseCase updateUpaUseCase;
     private final FindNearestUpaUseCase findNearestUpaUseCase;
     private final UpaLocationMapper upaLocationMapper;
+    private final FindUpaWithLowerCapacity findUpaWithLowerCapacityUseCase;
 
     @PostMapping("/create")
     public Mono<ResponseEntity<UpaDto>> createUpa(@RequestBody UpaDto upaDto) {
@@ -50,6 +51,20 @@ public class UpaController {
         return Mono.just(ResponseEntity.accepted().body(upaDtoFlux));
     }
 
+    @GetMapping("/near-upa")
+    public Mono<UpaLocationDto> getNearestUpa(@RequestParam Double latitude, @RequestParam Double longitude) {
+        Mono<Upa> upaDomain =  findNearestUpaUseCase.findNearestUpa(latitude, longitude);
+
+        return upaDomain.map(upaLocationMapper::toDto);
+    }
+
+    @GetMapping("/lower-capacity/{state}")
+    public Mono<ResponseEntity<UpaDto>> findUpaWithLowerCapacity(@PathVariable("state") Integer state) {
+        Mono<Upa> upa = findUpaWithLowerCapacityUseCase.findUpaWithLowerCapacity(state);
+
+        return upa.map(upas -> ResponseEntity.ok(upaDtoMapper.toDto(upas)));
+    }
+
 
     @DeleteMapping("/delete/{id}")
     public Mono<ResponseEntity<Void>> deleteUpa(@PathVariable("id") Long upaId) {
@@ -66,14 +81,5 @@ public class UpaController {
                 .map(updatedUpa -> ResponseEntity.ok(upaDtoMapper.toDto(updatedUpa)));
 
     }
-
-
-    @GetMapping("/near-upa")
-    public Mono<UpaLocationDto> getNearestUpa(@RequestParam Double latitude, @RequestParam Double longitude) {
-        Mono<Upa> upaDomain =  findNearestUpaUseCase.findNearestUpa(latitude, longitude);
-
-        return upaDomain.map(upaLocationMapper::toDto);
-    }
-
 
 }

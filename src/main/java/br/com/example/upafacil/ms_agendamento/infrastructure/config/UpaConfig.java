@@ -69,4 +69,10 @@ public class UpaConfig {
             @Qualifier("customUpaRepositoryGatewayImpl") UpaRepositoryGateway upaRepositoryGateway){
         return new FindNearestUpaUseCase(upaRepositoryGateway);
     }
+
+    @Bean
+    public FindUpaWithLowerCapacity customFindUpaWithLowerCapacity(
+            @Qualifier("customUpaRepositoryGatewayImpl") UpaRepositoryGateway upaRepositoryGateway){
+        return new FindUpaWithLowerCapacity(upaRepositoryGateway);
+    }
 }

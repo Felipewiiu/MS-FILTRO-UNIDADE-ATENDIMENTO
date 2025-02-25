@@ -2,7 +2,9 @@ package br.com.example.upafacil.ms_agendamento.infrastructure.gateway;
 
 import br.com.example.upafacil.ms_agendamento.application.gateway.UpaRepositoryGateway;
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
+import br.com.example.upafacil.ms_agendamento.domain.upaUtils.CalculateCapacityUsed;
 import br.com.example.upafacil.ms_agendamento.infrastructure.mapper.upa.UpaMapper;
+import br.com.example.upafacil.ms_agendamento.infrastructure.persistence.entity.UpaEntity;
 import br.com.example.upafacil.ms_agendamento.infrastructure.persistence.repository.UpaRepsitory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Comparator;
+
+import static br.com.example.upafacil.ms_agendamento.domain.upaUtils.CalculateHaversi.calculateDistance;
 
 @Service
 @RequiredArgsConstructor
@@ -63,8 +67,6 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     @Override
     public Mono<Upa> findNearestUpa(Double latitude, Double longitude) {
-        var teste = upaRepository.findAll();
-        System.out.println(teste);
 
         return upaRepository.findAll()
                 .collectList()
@@ -76,18 +78,17 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     }
 
+    @Override
+    public Mono<Upa> findUpaWithLowerCapacity(Integer state) {
+        Flux<UpaEntity> upaEntityFlux = upaRepository.findByState(state);
 
-    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        final int EARTH_RADIUS = 6371;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
+        return upaEntityFlux.collectList()
+                .mapNotNull(upaEntities -> upaEntities.stream()
+                        .min(Comparator.comparingDouble(CalculateCapacityUsed::calculateCapacityUsed))
+                        .orElse(null)).map(upaMapper::toDomain);
 
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return EARTH_RADIUS * c;
     }
+
+
 
 }
