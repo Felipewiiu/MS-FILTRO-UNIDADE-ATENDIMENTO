@@ -6,6 +6,7 @@ import br.com.example.upafacil.ms_agendamento.presentation.dto.UpaDto;
 import br.com.example.upafacil.ms_agendamento.presentation.dto.UpaLocationDto;
 import br.com.example.upafacil.ms_agendamento.presentation.mapper.UpaDtoMapper;
 import br.com.example.upafacil.ms_agendamento.presentation.mapper.UpaLocationMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,13 +57,16 @@ public class UpaController {
                 .then(Mono.just(ResponseEntity.noContent().build()));
     }
 
-    @PutMapping("/update/{id}")
-    public Mono<ResponseEntity<UpaDto>> updateUpa (@PathVariable("id") Long upaId, @RequestBody UpaDto upaDto) {
-        Mono<UpaDto> upa = updateUpaUseCase.updateUpa(upaId, upaDtoMapper.toDomain(upaDto))
-                .map(upaDtoMapper::toDto);
+    @PatchMapping("/update/{id}")
+    public Mono<ResponseEntity<UpaDto>> updateUpa(
+            @PathVariable("id") Long upaId,
+            @Valid @RequestBody UpaDto upaDto) {
 
-        return upa.map(ResponseEntity::ok);
+        return updateUpaUseCase.updateUpa(upaId, upaDtoMapper.toDomain(upaDto))
+                .map(updatedUpa -> ResponseEntity.ok(upaDtoMapper.toDto(updatedUpa)));
+
     }
+
 
     @GetMapping("/near-upa")
     public Mono<UpaLocationDto> getNearestUpa(@RequestParam Double latitude, @RequestParam Double longitude) {

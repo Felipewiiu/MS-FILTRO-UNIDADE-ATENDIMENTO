@@ -2,6 +2,7 @@ package br.com.example.upafacil.ms_agendamento.infrastructure.persistence.entity
 
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
 import br.com.example.upafacil.ms_agendamento.domain.enums.StateCountry;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
@@ -19,6 +20,7 @@ public class UpaEntity {
 
     private String name;
 
+    @NotNull
     private Integer capacity;
 
     private String street;
@@ -56,40 +58,5 @@ public class UpaEntity {
         }
     }
 
-    public void upaUpdate(Upa upaDomain) {
 
-        if(upaDomain.getName() != null) {
-            this.name = upaDomain.getName();
-        }
-
-        if(upaDomain.getCapacity() != null) {
-            this.capacity = upaDomain.getCapacity();
-        }
-
-        if(upaDomain.getStreet() != null) {
-            this.street = upaDomain.getStreet();
-        }
-
-        if(upaDomain.getCity() != null) {
-            this.city = upaDomain.getCity();
-        }
-
-        if(upaDomain.getState() != null) {
-            this.state = upaDomain.getState();
-        }
-
-        if(upaDomain.getZipCode() != null) {
-            this.zipCode = upaDomain.getZipCode();
-        }
-
-        if(upaDomain.getLatitude() != null) {
-            this.latitude = upaDomain.getLatitude();
-        }
-
-        if(upaDomain.getLongitude() != null) {
-            this.longitude = upaDomain.getLongitude();
-        }
-
-
-    }
 }

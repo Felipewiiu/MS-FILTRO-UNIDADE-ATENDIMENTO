@@ -1,7 +1,8 @@
 package br.com.example.upafacil.ms_agendamento.presentation.dto;
 
-import br.com.example.upafacil.ms_agendamento.domain.enums.StateCountry;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record UpaDto(
 
         String name,

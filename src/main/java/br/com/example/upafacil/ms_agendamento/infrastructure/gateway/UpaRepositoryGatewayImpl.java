@@ -46,11 +46,20 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
     public Mono<Upa> updateUpa(Long upaId, Upa newUpa) {
         return upaRepository.findById(upaId)
                 .flatMap(existingUpa -> {
-                    existingUpa.upaUpdate(newUpa);
+                    if (newUpa.getName() != null) existingUpa.setName(newUpa.getName());
+                    if (newUpa.getCapacity() != null) existingUpa.setCapacity(newUpa.getCapacity());
+                    if (newUpa.getStreet() != null) existingUpa.setStreet(newUpa.getStreet());
+                    if (newUpa.getCity() != null) existingUpa.setCity(newUpa.getCity());
+                    if (newUpa.getState() != null) existingUpa.setState(newUpa.getState());
+                    if (newUpa.getZipCode() != null) existingUpa.setZipCode(newUpa.getZipCode());
+                    if (newUpa.getLatitude() != null) existingUpa.setLatitude(newUpa.getLatitude());
+                    if (newUpa.getLongitude() != null) existingUpa.setLongitude(newUpa.getLongitude());
+
                     return upaRepository.save(existingUpa);
                 })
                 .map(upaMapper::toDomain);
     }
+
 
     @Override
     public Mono<Upa> findNearestUpa(Double latitude, Double longitude) {
@@ -66,7 +75,7 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        final int EARTH_RADIUS = 6371; // Raio da Terra em km
+        final int EARTH_RADIUS = 6371;
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
 
