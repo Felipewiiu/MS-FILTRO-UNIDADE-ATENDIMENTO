@@ -3,7 +3,7 @@ package br.com.example.upafacil.ms_agendamento.domain.upaUtils;
 import lombok.Getter;
 
 @Getter
-public class CalculateHaversi {
+public class CalculateHaversine {
 
     public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int EARTH_RADIUS = 6371;

@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Comparator;
 
-import static br.com.example.upafacil.ms_agendamento.domain.upaUtils.CalculateHaversi.calculateDistance;
+import static br.com.example.upafacil.ms_agendamento.domain.upaUtils.CalculateHaversine.calculateDistance;
 
 @Service
 @RequiredArgsConstructor

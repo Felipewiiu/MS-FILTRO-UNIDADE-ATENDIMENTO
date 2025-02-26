@@ -23,6 +23,8 @@ VALUES ('UPA Botafogo', 500, 'Rua das Flores', 'Rio de Janeiro', 18, '22021-000'
         -43.5744062970705, 75),
        ('UPA Niterói', 450, 'Rua Dr. Paulo Alves', 'Niterói', 18, '24020-080', -22.90088112295905, -43.10905419772469,
         120),
+       ('Upa 24h Padre Luigi Costanzo Bruno', 500, 'Av. Joaquim da Costa Lima, 472 - Dos Ferreiras, Belford Roxo.',
+        'Rio de Janeiro', 18, '26183-180', -22.719565417291072, -43.335375486945075, 0),
        ('UPA Vila Mariana', 550, 'Rua Domingos de Morais', 'São Paulo', 24, '04010-000', -23.59599584651218,
         -46.64286249747275, 255),
        ('UPA Santana', 350, 'Avenida Luiz Dumont Villares', 'São Paulo', 24, '02036-050', -25.102328667553415,
