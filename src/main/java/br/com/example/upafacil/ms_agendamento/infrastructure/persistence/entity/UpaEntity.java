@@ -10,7 +10,6 @@ import org.springframework.data.relational.core.mapping.Table;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @Table("upa")
 public class UpaEntity {
@@ -22,7 +21,7 @@ public class UpaEntity {
 
     private Integer capacity;
 
-    private Integer capacityUsed;
+    private Integer capacityUsed = 0;
 
     private String street;
 

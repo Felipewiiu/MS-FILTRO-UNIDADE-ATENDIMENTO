@@ -1,5 +1,6 @@
 package br.com.example.upafacil.ms_agendamento.domain.entities;
 
+import jakarta.ws.rs.DefaultValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ public class Upa {
 
     private Integer capacity;
 
-    private Integer capacityUsed;
+    private Integer capacityUsed = 0;
 
     private String street;
 

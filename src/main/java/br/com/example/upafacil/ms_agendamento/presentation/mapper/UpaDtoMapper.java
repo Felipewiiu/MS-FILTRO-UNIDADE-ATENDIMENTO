@@ -8,7 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UpaDtoMapper {
 
-
     UpaDto toDto(Upa upa);
 
     Upa toDomain(UpaDto upaDto);
