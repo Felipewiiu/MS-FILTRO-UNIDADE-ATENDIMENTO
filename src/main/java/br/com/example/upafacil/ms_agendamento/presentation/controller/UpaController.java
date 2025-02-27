@@ -9,10 +9,12 @@ import br.com.example.upafacil.ms_agendamento.presentation.mapper.UpaLocationMap
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +31,7 @@ public class UpaController {
     private final UpaLocationMapper upaLocationMapper;
     private final FindUpaWithLowerCapacity findUpaWithLowerCapacityUseCase;
     private final ReduceServiceCapacityUpa reduceServiceCapacityUpaUseCase;
+    private final Sinks.Many<UpaDto> eventoSink = Sinks.many().multicast().onBackpressureBuffer();
 
     @PostMapping("/create")
     public Mono<ResponseEntity<UpaDto>> createUpa(@RequestBody UpaDto upaDto) {
@@ -71,7 +74,19 @@ public class UpaController {
     @GetMapping("/register-service/{upaId}")
     public Mono<UpaDto> registerServiceUpa(@PathVariable("upaId") Long upaId) {
         Mono<Upa> upa = reduceServiceCapacityUpaUseCase.reduceServiceCapacityUpa(upaId);
-        return upa.map(upaDtoMapper::toDto);
+        return upa.map(upaDtoMapper::toDto).doOnSuccess(dto -> {
+                    System.out.println("Capacidade atualizada: " + dto.capacityUsed());
+                    eventoSink.tryEmitNext(dto);
+                })
+                .doOnError(error -> System.err.println("Erro: " + error.getMessage()));
+    }
+
+    @GetMapping(value = "/capacity-updates", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<UpaDto> streamCapacityUpdates() {
+        return eventoSink.asFlux()
+                .doOnSubscribe(sub -> System.out.println("Cliente conectado ao /capacity-updates"))
+                .doOnNext(dto -> System.out.println("Enviando evento SSE: " + dto.capacityUsed()))
+                .doOnError(error -> System.err.println("Erro no Flux: " + error.getMessage()));
     }
 
     @DeleteMapping("/delete/{id}")
