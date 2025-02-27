@@ -7,11 +7,12 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
-public class FindUpaWithLowerCapacity {
+public class ReduceServiceCapacityUpa {
 
     private final UpaRepositoryGateway upaRepositoryGateway;
 
-    public Mono<Upa> findUpaWithLowerCapacity(Integer state) {
-        return upaRepositoryGateway.findUpaWithLowerCapacity(state);
+    public Mono<Upa> reduceServiceCapacityUpa(Long upaId){
+        return upaRepositoryGateway.reduceServiceCapacityUpa(upaId)
+                .switchIfEmpty(Mono.error(new NotFoundUpaException(upaId)));
     }
 }

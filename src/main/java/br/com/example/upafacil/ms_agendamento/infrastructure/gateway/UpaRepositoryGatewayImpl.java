@@ -1,11 +1,15 @@
 package br.com.example.upafacil.ms_agendamento.infrastructure.gateway;
 
+import br.com.example.upafacil.ms_agendamento.application.exeptions.ExceededUpaCapacityException;
+import br.com.example.upafacil.ms_agendamento.application.exeptions.NotFoundUpaException;
 import br.com.example.upafacil.ms_agendamento.application.gateway.UpaRepositoryGateway;
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
 import br.com.example.upafacil.ms_agendamento.domain.upaUtils.CalculateCapacityUsed;
 import br.com.example.upafacil.ms_agendamento.infrastructure.mapper.upa.UpaMapper;
 import br.com.example.upafacil.ms_agendamento.infrastructure.persistence.entity.UpaEntity;
 import br.com.example.upafacil.ms_agendamento.infrastructure.persistence.repository.UpaRepsitory;
+import jakarta.validation.ValidationException;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -52,6 +56,7 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
                 .flatMap(existingUpa -> {
                     if (newUpa.getName() != null) existingUpa.setName(newUpa.getName());
                     if (newUpa.getCapacity() != null) existingUpa.setCapacity(newUpa.getCapacity());
+                    if (newUpa.getCapacityUsed() != null) existingUpa.setCapacityUsed(newUpa.getCapacityUsed());
                     if (newUpa.getStreet() != null) existingUpa.setStreet(newUpa.getStreet());
                     if (newUpa.getCity() != null) existingUpa.setCity(newUpa.getCity());
                     if (newUpa.getState() != null) existingUpa.setState(newUpa.getState());
@@ -80,7 +85,8 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     @Override
     public Mono<Upa> findUpaWithLowerCapacity(Integer state) {
-        Flux<UpaEntity> upaEntityFlux = upaRepository.findByState(state);
+        Flux<UpaEntity> upaEntityFlux = upaRepository.findByState(state)
+                .switchIfEmpty(Flux.empty());
 
         return upaEntityFlux.collectList()
                 .mapNotNull(upaEntities -> upaEntities.stream()
@@ -89,6 +95,24 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     }
 
+    @Override
+    public Mono<Upa> reduceServiceCapacityUpa(Long upaId) {
+       return upaRepository.findById(upaId).flatMap( upa -> {
+           if(upa.getCapacityUsed() < upa.getCapacity()){
+               upa.setCapacityUsed(upa.getCapacityUsed() + 1) ;
+               return upaRepository.save(upa);
+           }else {
+               return Mono.error( new ExceededUpaCapacityException());
+           }
+        }).map(upaMapper::toDomain);
+
+    }
+
+
+    @Override
+    public Mono<Upa> freesUpCapacityUpa(Long upaId) {
+        return null;
+    }
 
 
 }

@@ -1,7 +1,9 @@
 package br.com.example.upafacil.ms_agendamento.infrastructure.exeptionhandler;
 
+import br.com.example.upafacil.ms_agendamento.application.exeptions.ExceededUpaCapacityException;
 import br.com.example.upafacil.ms_agendamento.application.exeptions.NotFoundUpaException;
 import jakarta.validation.ValidationException;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -53,6 +55,20 @@ public class ControllerExeptionHandler {
         error.setStatus(status.value());
         error.setError(ex.getMessage());
         error.setMessage("Upa not found");
+        error.setPath(exchange.getRequest().getPath().value());
+
+        return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(ExceededUpaCapacityException.class)
+    public ResponseEntity<StandardError> handleNotFoundUpaException(ExceededUpaCapacityException ex, ServerWebExchange exchange) {
+        HttpStatus status = HttpStatus.valueOf(202);
+        StandardError error = new StandardError();
+
+        error.setTimestamp(Instant.now());
+        error.setStatus(status.value());
+        error.setError(ex.getMessage());
+        error.setMessage("Capacity exceeded");
         error.setPath(exchange.getRequest().getPath().value());
 
         return ResponseEntity.status(status).body(error);

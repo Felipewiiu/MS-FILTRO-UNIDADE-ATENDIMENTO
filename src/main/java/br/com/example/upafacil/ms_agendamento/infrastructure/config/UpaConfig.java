@@ -75,4 +75,10 @@ public class UpaConfig {
             @Qualifier("customUpaRepositoryGatewayImpl") UpaRepositoryGateway upaRepositoryGateway){
         return new FindUpaWithLowerCapacity(upaRepositoryGateway);
     }
+
+    @Bean
+    public ReduceServiceCapacityUpa customReduceServiceCapacityUpa(
+            @Qualifier("customUpaRepositoryGatewayImpl") UpaRepositoryGateway upaRepositoryGateway){
+        return new ReduceServiceCapacityUpa(upaRepositoryGateway);
+    }
 }

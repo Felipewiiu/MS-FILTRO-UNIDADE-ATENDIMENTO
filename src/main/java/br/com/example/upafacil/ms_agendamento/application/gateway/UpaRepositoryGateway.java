@@ -19,4 +19,8 @@ public interface UpaRepositoryGateway {
     Mono<Upa> findNearestUpa(Double latitude, Double longitude);
 
     Mono<Upa> findUpaWithLowerCapacity(Integer state);
+
+    Mono<Upa> reduceServiceCapacityUpa(Long upaId);
+
+    Mono<Upa> freesUpCapacityUpa(Long upaId);
 }
