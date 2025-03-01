@@ -1,7 +1,6 @@
 package br.com.example.upafacil.ms_agendamento.infrastructure.gateway;
 
 import br.com.example.upafacil.ms_agendamento.application.exeptions.ExceededUpaCapacityException;
-import br.com.example.upafacil.ms_agendamento.application.exeptions.NotFoundUpaException;
 import br.com.example.upafacil.ms_agendamento.application.gateway.UpaRepositoryGateway;
 import br.com.example.upafacil.ms_agendamento.domain.entities.Upa;
 import br.com.example.upafacil.ms_agendamento.domain.upaUtils.CalculateCapacityUsed;
@@ -9,7 +8,6 @@ import br.com.example.upafacil.ms_agendamento.infrastructure.mapper.upa.UpaMappe
 import br.com.example.upafacil.ms_agendamento.infrastructure.persistence.entity.UpaEntity;
 import br.com.example.upafacil.ms_agendamento.infrastructure.persistence.repository.UpaRepsitory;
 import jakarta.validation.ValidationException;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -111,7 +109,14 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
     @Override
     public Mono<Upa> freesUpCapacityUpa(Long upaId) {
-        return null;
+        return upaRepository.findById(upaId).flatMap(upaEntity -> {
+            if (upaEntity.getCapacityUsed() != 0) {
+                upaEntity.setCapacityUsed(upaEntity.getCapacityUsed() - 1);
+                return upaRepository.save(upaEntity);
+            } else {
+                return Mono.error(new ValidationException("Limite mínimo atingido"));
+            }
+        }).map(upaMapper::toDomain);
     }
 
 

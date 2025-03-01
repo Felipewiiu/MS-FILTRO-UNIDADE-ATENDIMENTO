@@ -31,7 +31,15 @@ public class UpaController {
     private final UpaLocationMapper upaLocationMapper;
     private final FindUpaWithLowerCapacity findUpaWithLowerCapacityUseCase;
     private final ReduceServiceCapacityUpa reduceServiceCapacityUpaUseCase;
+    private final FreesUpaCapacityUpa freesUpaCapacityUpaUseCase;
     private final Sinks.Many<UpaDto> eventoSink = Sinks.many().multicast().onBackpressureBuffer();
+
+
+    @GetMapping(value = "/capacity-updates", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<UpaDto> streamCapacityUpdates() {
+        return eventoSink.asFlux();
+    }
+
 
     @PostMapping("/create")
     public Mono<ResponseEntity<UpaDto>> createUpa(@RequestBody UpaDto upaDto) {
@@ -56,10 +64,9 @@ public class UpaController {
     }
 
 
-
     @GetMapping("/near-upa")
     public Mono<UpaLocationDto> getNearestUpa(@RequestParam Double latitude, @RequestParam Double longitude) {
-        Mono<Upa> upaDomain =  findNearestUpaUseCase.findNearestUpa(latitude, longitude);
+        Mono<Upa> upaDomain = findNearestUpaUseCase.findNearestUpa(latitude, longitude);
 
         return upaDomain.map(upaLocationMapper::toDto);
     }
@@ -74,20 +81,16 @@ public class UpaController {
     @GetMapping("/register-service/{upaId}")
     public Mono<UpaDto> registerServiceUpa(@PathVariable("upaId") Long upaId) {
         Mono<Upa> upa = reduceServiceCapacityUpaUseCase.reduceServiceCapacityUpa(upaId);
-        return upa.map(upaDtoMapper::toDto).doOnSuccess(dto -> {
-                    System.out.println("Capacidade atualizada: " + dto.capacityUsed());
-                    eventoSink.tryEmitNext(dto);
-                })
-                .doOnError(error -> System.err.println("Erro: " + error.getMessage()));
+        return upa.map(upaDtoMapper::toDto).doOnSuccess(eventoSink::tryEmitNext);
+
     }
 
-    @GetMapping(value = "/capacity-updates", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<UpaDto> streamCapacityUpdates() {
-        return eventoSink.asFlux()
-                .doOnSubscribe(sub -> System.out.println("Cliente conectado ao /capacity-updates"))
-                .doOnNext(dto -> System.out.println("Enviando evento SSE: " + dto.capacityUsed()))
-                .doOnError(error -> System.err.println("Erro no Flux: " + error.getMessage()));
+    @GetMapping("/frees-capacity/{upaId}")
+    public Mono<UpaDto> freesUpaCapacity(@PathVariable("upaId") Long upaId) {
+        return freesUpaCapacityUpaUseCase.freesCapacity(upaId)
+                .map(upaDtoMapper::toDto).doOnSuccess(eventoSink::tryEmitNext);
     }
+
 
     @DeleteMapping("/delete/{id}")
     public Mono<ResponseEntity<Void>> deleteUpa(@PathVariable("id") Long upaId) {
