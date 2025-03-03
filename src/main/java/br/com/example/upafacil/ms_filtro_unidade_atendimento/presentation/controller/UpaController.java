@@ -46,9 +46,8 @@ public class UpaController {
     @Operation(summary = "Cadastra uma nova UPA")
     @PostMapping("/create")
     public Mono<ResponseEntity<UpaDto>> createUpa(@RequestBody UpaDto upaDto) {
-        Mono<Upa> upa = createUpaUseCase.createUpa(upaDtoMapper.toDomain(upaDto));
-
-        return upa.map(upas -> ResponseEntity.ok(upaDtoMapper.toDto(upas)));
+        return createUpaUseCase.createUpa(upaDtoMapper.toDomain(upaDto))
+                .map(upas -> new ResponseEntity<>(upaDtoMapper.toDto(upas), HttpStatus.CREATED));
 
     }
 
