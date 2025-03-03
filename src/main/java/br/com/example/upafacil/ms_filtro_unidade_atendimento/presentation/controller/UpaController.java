@@ -6,6 +6,7 @@ import br.com.example.upafacil.ms_filtro_unidade_atendimento.presentation.dto.Up
 import br.com.example.upafacil.ms_filtro_unidade_atendimento.presentation.dto.UpaLocationDto;
 import br.com.example.upafacil.ms_filtro_unidade_atendimento.presentation.mapper.UpaDtoMapper;
 import br.com.example.upafacil.ms_filtro_unidade_atendimento.presentation.mapper.UpaLocationMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,12 +36,14 @@ public class UpaController {
     private final Sinks.Many<UpaDto> eventoSink = Sinks.many().multicast().onBackpressureBuffer();
 
 
+    @Operation(summary = "Acompanha a fila de atendimento em tempo real")
     @GetMapping(value = "/real-time-queue", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<UpaDto> streamCapacityUpdates() {
         return eventoSink.asFlux();
     }
 
 
+    @Operation(summary = "Cadastra uma nova UPA")
     @PostMapping("/create")
     public Mono<ResponseEntity<UpaDto>> createUpa(@RequestBody UpaDto upaDto) {
         Mono<Upa> upa = createUpaUseCase.createUpa(upaDtoMapper.toDomain(upaDto));
@@ -49,12 +52,14 @@ public class UpaController {
 
     }
 
+    @Operation(summary = "Busca uma UPA pelo ID")
     @GetMapping("/{id}")
     public Mono<ResponseEntity<UpaDto>> findUpaByUpaId(@PathVariable("id") Long upaId) {
         Mono<Upa> upa = findUpaByIdUseCase.findUpaById(upaId);
         return upa.map(upas -> ResponseEntity.status(HttpStatus.OK).body(upaDtoMapper.toDto(upas)));
     }
 
+    @Operation(summary = "Retorna todas as UPAs disponíveis")
     @GetMapping("/all")
     public Mono<ResponseEntity<Flux<UpaDto>>> findAllUpa() {
         Flux<UpaDto> upaDtoFlux = findAllUpasUseCase.findAllUpa()
@@ -64,6 +69,7 @@ public class UpaController {
     }
 
 
+    @Operation(summary = "Retorna a UPA mais próxima do paciente segundo sua localização")
     @GetMapping("/near-upa")
     public Mono<UpaLocationDto> getNearestUpa(@RequestParam Double latitude, @RequestParam Double longitude) {
         Mono<Upa> upaDomain = findNearestUpaUseCase.findNearestUpa(latitude, longitude);
@@ -71,13 +77,15 @@ public class UpaController {
         return upaDomain.map(upaLocationMapper::toDto);
     }
 
+    @Operation(summary = "Retorna a UPA com menor fila de atendimento")
     @GetMapping("/lower-queue/state/{state}")
-    public Mono<ResponseEntity<UpaDto>> findUpaWithLowerCapacity(@PathVariable("state") Integer state) {
+    public Mono<ResponseEntity<UpaDto>> findUpaWithLowerQueue(@PathVariable("state") Integer state) {
         Mono<Upa> upa = findUpaWithLowerCapacityUseCase.findUpaWithLowerCapacity(state);
 
         return upa.map(upas -> ResponseEntity.ok(upaDtoMapper.toDto(upas)));
     }
 
+    @Operation(summary = "Adiciona paciente na fila de atendimento")
     @GetMapping("/register-service/{upaId}")
     public Mono<UpaDto> registerServiceUpa(@PathVariable("upaId") Long upaId) {
         Mono<Upa> upa = reduceServiceCapacityUpaUseCase.reduceServiceCapacityUpa(upaId);
@@ -85,6 +93,7 @@ public class UpaController {
 
     }
 
+    @Operation(summary = "Retira paciente da fila de atendimento")
     @GetMapping("/frees-queue/{upaId}")
     public Mono<UpaDto> freesUpaCapacity(@PathVariable("upaId") Long upaId) {
         return freesUpaCapacityUpaUseCase.freesCapacity(upaId)
@@ -92,12 +101,14 @@ public class UpaController {
     }
 
 
+    @Operation(summary = "Remove uma UPA do sistema")
     @DeleteMapping("/delete/{id}")
     public Mono<ResponseEntity<Void>> deleteUpa(@PathVariable("id") Long upaId) {
         return deletUpaUseCase.deleteUpaById(upaId)
                 .then(Mono.just(ResponseEntity.noContent().build()));
     }
 
+    @Operation(summary = "Atualiza informações da UPA")
     @PatchMapping("/update/{id}")
     public Mono<ResponseEntity<UpaDto>> updateUpa(
             @PathVariable("id") Long upaId,

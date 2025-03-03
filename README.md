@@ -15,6 +15,8 @@ A API **ms-filtro-unidade-atendimento** tem como principal objetivo facilitar o 
 - `GET /upa/real-time-queue` → Acompanha a fila de atendimento em tempo real
 - `GET /upa/lower-queue/state/{state}` → Retorna a UPA com menor fila de atendimento
 - `GET /upa/near-upa` → Retorna a UPA mais próxima do paciente segundo sua localização
+- `GET /upa/register-service/{upaId}` → Adiciona paciente na fila de atendimento
+- `GET /upa/frees-queue/{upaId}` → Retira paciente da fila de atendimento
 
 ### 📌 Gestão de UPAs
 - `POST /upa/create` → Cadastra uma nova UPA

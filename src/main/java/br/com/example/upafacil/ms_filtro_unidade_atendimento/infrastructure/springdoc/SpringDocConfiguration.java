@@ -19,7 +19,12 @@ public class SpringDocConfiguration {
         logger.debug("SpringDocConfiguration sendo instanciada");
     }
 
-    String desc = "Microsserviço de filtro de unidades de atendimento, ";
+    String desc = """
+            A API ms-filtro-unidade-atendimento tem como principal objetivo facilitar o direcionamento de
+             pacientes para a Unidade de Pronto Atendimento (UPA) mais próxima e com menor tempo de espera. 
+             Com essa API, é possível acompanhar em tempo real a fila de atendimento das UPAs, registrar e 
+             liberar atendimentos, além de consultar as unidades disponíveis.
+            """;
 
     @Bean
     public OpenAPI customOpenAPI() {
