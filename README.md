@@ -38,7 +38,7 @@ A API **ms-filtro-unidade-atendimento** tem como principal objetivo facilitar o 
 - Spring cloud netflix
 - Algoritimo de haversine para cálculo de distâncias
 
-## 🛠 Como Executar
+## 🛠 Como Executar localmente
 1. Clone este repositório:
    ```bash
    git clone --recurse-submodules https://github.com/Felipewiiu/UPA_FACIL-MICROSSERVICO.git
@@ -52,6 +52,27 @@ A API **ms-filtro-unidade-atendimento** tem como principal objetivo facilitar o 
    ```
    http://localhost:<PORTA>/swagger-ui/webjars/swagger-ui/index.html
    ```
+## 🛠 Como Executar via Docker
+
+1. Entre na raíz de cada microserviço e crie a imagem deles com os seguintes comandos
+
+````shell
+docker build -t ms-api-gateway:1.0 .
+````
+
+````shell
+docker build -t ms-server-eureka:1.0 .
+````
+
+````shell
+docker build -t ms-filtro-unidade-atendimento:1.0 .
+````
+
+2. Depois das imagens criadas execute o seguinte comando na raíz do projeto:
+
+````shell
+docker-compose up
+````
 
 ## 📝 Licença
 Este projeto está sob a licença MIT.
