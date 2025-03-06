@@ -3,7 +3,6 @@ package br.com.example.upafacil.ms_filtro_unidade_atendimento.infrastructure.gat
 import br.com.example.upafacil.ms_filtro_unidade_atendimento.application.exeptions.ExceededUpaCapacityException;
 import br.com.example.upafacil.ms_filtro_unidade_atendimento.application.gateway.UpaRepositoryGateway;
 import br.com.example.upafacil.ms_filtro_unidade_atendimento.domain.entities.Upa;
-import br.com.example.upafacil.ms_filtro_unidade_atendimento.domain.upaUtils.CalculateCapacityUsed;
 import br.com.example.upafacil.ms_filtro_unidade_atendimento.infrastructure.mapper.upa.UpaMapper;
 import br.com.example.upafacil.ms_filtro_unidade_atendimento.infrastructure.persistence.entity.UpaEntity;
 import br.com.example.upafacil.ms_filtro_unidade_atendimento.infrastructure.persistence.repository.UpaRepsitory;
@@ -14,9 +13,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Comparator;
-import java.util.stream.Collectors;
-
-import static br.com.example.upafacil.ms_filtro_unidade_atendimento.domain.upaUtils.CalculateHaversine.calculateDistance;
 
 @Service
 @RequiredArgsConstructor
@@ -72,21 +68,29 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
     @Override
     public Flux<Upa> findNearestUpa(Double latitude, Double longitude) {
         return upaRepository.findAll()
-                .sort(Comparator.comparingDouble(upa -> calculateDistance(latitude, longitude, upa.getLatitude(), upa.getLongitude())))
-                .take(5)
-                .map(upaMapper::toDomain);
-
+                .map(upaMapper::toDomain)
+                .collectList()
+                .flatMapMany(upas -> Flux.fromIterable(
+                        upas.stream()
+                                .sorted(Comparator.comparingDouble(upa -> upa.calculateDistance(latitude, longitude, upa.getLatitude(), upa.getLongitude())))
+                                .limit(5)
+                                .toList()
+                ));
     }
+
 
     @Override
     public Mono<Upa> findUpaWithLowerCapacity(Integer state) {
         Flux<UpaEntity> upaEntityFlux = upaRepository.findByState(state)
                 .switchIfEmpty(Flux.empty());
 
-        return upaEntityFlux.collectList()
-                .mapNotNull(upaEntities -> upaEntities.stream()
-                        .min(Comparator.comparingDouble(CalculateCapacityUsed::calculateCapacityUsed))
-                        .orElse(null)).map(upaMapper::toDomain);
+        return upaEntityFlux.map(upaMapper::toDomain).collectList()
+                .mapNotNull(upaList -> upaList.stream()
+                        .min(Comparator.comparingDouble(Upa::calculateCapacityUsed))
+                        .orElse(null)
+                );
+
+
 
     }
 
