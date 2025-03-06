@@ -16,7 +16,7 @@ public interface UpaRepositoryGateway {
 
     Mono<Upa> updateUpa(Long upa, Upa newUpa);
 
-    Mono<Upa> findNearestUpa(Double latitude, Double longitude);
+    Flux<Upa> findNearestUpa(Double latitude, Double longitude);
 
     Mono<Upa> findUpaWithLowerCapacity(Integer state);
 

@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import static br.com.example.upafacil.ms_filtro_unidade_atendimento.domain.upaUtils.CalculateHaversine.calculateDistance;
 
@@ -69,15 +70,11 @@ public class UpaRepositoryGatewayImpl implements UpaRepositoryGateway {
 
 
     @Override
-    public Mono<Upa> findNearestUpa(Double latitude, Double longitude) {
-
+    public Flux<Upa> findNearestUpa(Double latitude, Double longitude) {
         return upaRepository.findAll()
-                .collectList()
-                .mapNotNull(upas -> upas.stream()
-                        .min(Comparator.comparingDouble(upa -> calculateDistance(latitude, longitude, upa.getLatitude(), upa.getLongitude())))
-                        .orElse(null)
-                )
-                .flatMap(upa -> upa == null ? Mono.empty() : Mono.just(upaMapper.toDomain(upa)));
+                .sort(Comparator.comparingDouble(upa -> calculateDistance(latitude, longitude, upa.getLatitude(), upa.getLongitude())))
+                .take(5)
+                .map(upaMapper::toDomain);
 
     }
 

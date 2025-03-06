@@ -68,10 +68,10 @@ public class UpaController {
     }
 
 
-    @Operation(summary = "Retorna a UPA mais próxima do paciente segundo sua localização")
+    @Operation(summary = "Retorna a UPAs mais próxima do paciente segundo sua localização")
     @GetMapping("/near-upa")
-    public Mono<UpaLocationDto> getNearestUpa(@RequestParam Double latitude, @RequestParam Double longitude) {
-        Mono<Upa> upaDomain = findNearestUpaUseCase.findNearestUpa(latitude, longitude);
+    public Flux<UpaLocationDto> getNearestUpa(@RequestParam Double latitude, @RequestParam Double longitude) {
+        Flux<Upa> upaDomain = findNearestUpaUseCase.findNearestUpa(latitude, longitude);
 
         return upaDomain.map(upaLocationMapper::toDto);
     }
